@@ -29,6 +29,19 @@ app.get("/todo", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/todo/create", async (req: Request, res: Response) => {
+  try {
+    const createTodo = await prisma.todo.create({ data: req.body });
+
+    res.status(200).send({
+      message: "ADD TODO",
+      result: createTodo,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // run app server
 app.listen(PORT, () => {
   console.log("API RUNNING", PORT);
