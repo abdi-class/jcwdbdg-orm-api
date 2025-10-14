@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
+import prisma from "./prisma";
 
 const PORT = process.env.PORT;
 
@@ -15,6 +16,17 @@ app.use(express.json()); // for receive req.body
 // define app main router
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("<h1>ORM API</h1>");
+});
+
+// define other route
+app.get("/todo", async (req: Request, res: Response) => {
+  try {
+    const todo = await prisma.todo.findMany();
+
+    res.status(200).send(todo);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // run app server
