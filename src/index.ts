@@ -42,6 +42,22 @@ app.post("/todo/create", async (req: Request, res: Response) => {
   }
 });
 
+app.patch("/todo/update/:id", async (req: Request, res: Response) => {
+  try {
+    const updateTodo = await prisma.todo.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body,
+    });
+
+    res.status(200).send({
+      message: "Update Todo",
+      result: updateTodo,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // run app server
 app.listen(PORT, () => {
   console.log("API RUNNING", PORT);
