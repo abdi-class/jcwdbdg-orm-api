@@ -37,7 +37,11 @@ app.post("/auth/regis", async (req: Request, res: Response) => {
 
 app.get("/users", async (req: Request, res: Response) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: {
+        todo: true,
+      },
+    });
 
     res.status(200).send(users);
   } catch (error) {
