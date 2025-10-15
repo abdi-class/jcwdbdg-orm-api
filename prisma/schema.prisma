@@ -15,9 +15,30 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum Categories {
+  Makan
+  Jajan
+  Hiburan
+  Transport
+}
+
+model User {
+  // Main column
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+
+  // column definition for relation to table Todo
+  todo Todo[]
+}
+
 model Todo {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   todo      String
-  isDone    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  category  Categories?
+  isDone    Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  // define FK
+  User      User?       @relation(fields: [userId], references: [id])
+  userId    Int?
 }

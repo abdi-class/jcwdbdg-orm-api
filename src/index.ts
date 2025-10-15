@@ -19,6 +19,33 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // define other route
+// user router controller
+app.post("/auth/regis", async (req: Request, res: Response) => {
+  try {
+    const regis = await prisma.user.create({
+      data: req.body,
+    });
+
+    res.status(200).send({
+      message: "Register account success",
+      result: regis,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany();
+
+    res.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// todo router controller
 app.get("/todo", async (req: Request, res: Response) => {
   try {
     const todo = await prisma.todo.findMany();
