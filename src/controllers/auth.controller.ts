@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../prisma";
+import { hashPassword } from "../utils/hashPassword";
+import { compare } from "bcrypt";
 
 export const register = async (
   req: Request,
@@ -9,7 +11,10 @@ export const register = async (
   try {
     // code
     await prisma.accounts.create({
-      data: req.body,
+      data: {
+        ...req.body,
+        password: await hashPassword(req.body.password),
+      },
     });
 
     res.status(200).send({
@@ -29,15 +34,28 @@ export const login = async (
   try {
     // code
     const account = await prisma.accounts.findUnique({
-      where: req.body,
-      omit: {
-        password: true,
+      where: {
+        email: req.body.email,
       },
     });
 
+    if (!account) {
+      throw { code: 404, message: "Account not found" };
+    }
+
+    // validate password
+    const comparePassword = await compare(req.body.password, account?.password);
+    if (!comparePassword) {
+      throw { code: 401, message: "Wrong password" };
+    }
+
     res.status(200).send({
       success: true,
-      result: account,
+      result: {
+        email: account.email,
+        username: account.username,
+        id: account.id,
+      },
     });
   } catch (error) {
     next(error);
