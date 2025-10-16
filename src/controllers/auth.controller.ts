@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import prisma from "../prisma";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // code
     await prisma.accounts.create({
@@ -13,12 +17,15 @@ export const register = async (req: Request, res: Response) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    next(error);
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // code
     const account = await prisma.accounts.findUnique({
@@ -33,7 +40,6 @@ export const login = async (req: Request, res: Response) => {
       result: account,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    next(error);
   }
 };
