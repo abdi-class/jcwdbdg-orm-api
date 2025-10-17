@@ -14,7 +14,7 @@ export const createToken = (data: IDataToken) => {
     },
     secretKey,
     {
-      expiresIn: "2m",
+      expiresIn: "1h",
     }
   );
 };

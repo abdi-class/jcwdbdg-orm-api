@@ -4,10 +4,11 @@ import {
   getBlogDetail,
   getBlogs,
 } from "../controllers/blogs.controller";
+import { verifyToken } from "../middleware/verify";
 
 const route: Router = Router();
 
-route.post("/create", createBlog);
+route.post("/create", verifyToken, createBlog);
 route.get("/all", getBlogs);
 route.get("/detail/:id", getBlogDetail);
 

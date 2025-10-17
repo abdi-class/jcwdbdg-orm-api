@@ -8,7 +8,12 @@ export const createBlog = async (
 ) => {
   try {
     const create = await prisma.blogs.create({
-      data: req.body,
+      data: {
+        title: req.body.title,
+        imgUrl: req.body.imgUrl,
+        content: req.body.content,
+        accountsId: parseInt(res.locals.decript.id),
+      },
     });
 
     res.status(200).send({
