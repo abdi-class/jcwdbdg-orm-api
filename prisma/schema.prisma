@@ -16,29 +16,33 @@ datasource db {
 }
 
 enum Categories {
-  Makan
-  Jajan
-  Hiburan
-  Transport
+  Ekonomi
+  Transportasi
+  Lifestyle
+  Sport
+  Global
 }
 
-model User {
+model Accounts {
   // Main column
   id       Int    @id @default(autoincrement())
+  username String @unique
   email    String @unique
   password String
 
-  // column definition for relation to table Todo
-  todo Todo[]
+  // column definition for relation to table Blog
+  blogs Blogs[]
 }
 
-model Todo {
-  id        Int         @id @default(autoincrement())
-  todo      String
-  category  Categories?
-  isDone    Boolean     @default(false)
-  createdAt DateTime    @default(now())
+model Blogs {
+  id          Int         @id @default(autoincrement())
+  title       String
+  category    Categories?
+  content     String
+  imgUrl      String
+  isPublished Boolean     @default(false)
+  createdAt   DateTime    @default(now())
   // define FK
-  User      User?       @relation(fields: [userId], references: [id])
-  userId    Int?
+  Accounts    Accounts?   @relation(fields: [accountsId], references: [id])
+  accountsId  Int?
 }
