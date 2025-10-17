@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "../prisma";
 import { hashPassword } from "../utils/hashPassword";
 import { compare } from "bcrypt";
+import { createToken } from "../utils/createToken";
 
 export const register = async (
   req: Request,
@@ -54,7 +55,7 @@ export const login = async (
       result: {
         email: account.email,
         username: account.username,
-        id: account.id,
+        token: createToken({ id: account.id }),
       },
     });
   } catch (error) {
