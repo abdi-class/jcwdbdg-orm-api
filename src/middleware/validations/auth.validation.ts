@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
-const validationCheck = (req: Request, res: Response, next: NextFunction) => {
+export const validationCheck = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const errors = validationResult(req);
 
