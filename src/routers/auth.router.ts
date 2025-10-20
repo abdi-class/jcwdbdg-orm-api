@@ -26,8 +26,7 @@ class AuthRouter {
           }
           next(); // ini baru jalan ketika errors.isEmpty bernilai false
         } catch (error) {
-          console.log(error);
-          res.status(500).send(error);
+          next(error);
         }
       },
       this.authController.register

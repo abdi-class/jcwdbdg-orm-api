@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import AuthRouter from "./routers/auth.router";
 
 const PORT = process.env.PORT;
@@ -13,6 +13,7 @@ class App {
     this.app = express();
     this.configure();
     this.routers();
+    this.errorHandler();
   }
 
   private configure = () => {
@@ -28,6 +29,15 @@ class App {
     // define route
     const authRouter = new AuthRouter();
     this.app.use("/auth", authRouter.getRouter());
+  };
+
+  private errorHandler = () => {
+    this.app.use(
+      (error: any, req: Request, res: Response, next: NextFunction) => {
+        console.log(error);
+        res.status(error.code || 500).send(error);
+      }
+    );
   };
 
   public startAPI = () => {
